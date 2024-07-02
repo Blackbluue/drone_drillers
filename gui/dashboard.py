@@ -5,8 +5,6 @@ from __future__ import annotations
 from tkinter import ttk
 from typing import TYPE_CHECKING
 
-from yaml import Event
-
 from .label_counter import LabeledCounter
 
 if TYPE_CHECKING:
@@ -19,8 +17,8 @@ if TYPE_CHECKING:
     from utils.game_data import GameData
 
 
-NORMAL_SPEED = 1
-FAST_SPEED = 0.5
+NORMAL_SPEED = 1000
+FAST_SPEED = 500
 NO_DELAY = 0
 
 
@@ -116,15 +114,15 @@ class Dashboard(ttk.Frame):
         return frame
 
     def _set_speed_stop(self) -> None:
-        """Set the speed to normal."""
+        """Set the game speed to no delay."""
         self._controller.delay = NO_DELAY
 
     def _set_speed_normal(self) -> None:
-        """Set the speed to normal."""
+        """Set the game speed to normal."""
         self._controller.delay = NORMAL_SPEED
 
     def _set_speed_fast(self) -> None:
-        """Set the speed to normal."""
+        """Set the game speed to fast."""
         self._controller.delay = FAST_SPEED
 
     def add_atron_to_tree(self, new_drone: Atron) -> None:

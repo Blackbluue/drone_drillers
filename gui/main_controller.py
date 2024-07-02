@@ -17,7 +17,6 @@ from .graphic_tile import GraphicTile
 
 DEFAULT_TICKS = 100
 DEFAULT_REFINED = 100
-
 NO_DELAY = 0
 
 
@@ -31,25 +30,27 @@ class MainController(tk.Tk):
         self._initialize_values(map_dir)
 
     @property
-    def delay(self) -> float:
-        """The delay between ticks."""
-        return self._delay
-
-    @delay.setter
-    def delay(self, value: float) -> None:
-        """Set the delay between ticks.
+    def delay(self) -> int:
+        """The delay between ticks, in milliseconds.
 
         Setting the delay to non-zero causes the game to run in a loop. Set it
         back to 0 to return to manual play.
         """
+        return self._delay
+
+    @delay.setter
+    def delay(self, value: int) -> None:
         if value < NO_DELAY:
             raise ValueError("Delay must be non-negative")
-        self._delay = value
-        if self._delay == NO_DELAY:
-            self._game_data.player.set_controls()
-        else:
+        if self._delay == NO_DELAY and value != NO_DELAY:
+            self._delay = value
             self._game_data.player.unset_controls()
             self.event_generate("<<PlayerMoved>>")
+        elif self._delay != NO_DELAY and value == NO_DELAY:
+            self._delay = value
+            self._game_data.player.set_controls()
+        else:
+            self._delay = value
 
     def _initialize_values(self, map_dir: str | None) -> None:
         """Initialize game values from the GUI."""
@@ -111,8 +112,9 @@ class MainController(tk.Tk):
         if self._ticks.get() == 0:
             self._game_data.finish_excavation()
         elif self._delay:
-            sleep(self._delay)
-            self.event_generate("<<PlayerMoved>>")
+            self.after(
+                self._delay, lambda: self.event_generate("<<PlayerMoved>>")
+            )
 
     def _extract_player(self, _) -> None:
         """Extract the player from the map."""
