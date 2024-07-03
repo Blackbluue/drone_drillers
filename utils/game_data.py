@@ -40,19 +40,6 @@ class GameData:
         """The current mining map."""
         return self._current_map
 
-    @current_map.setter
-    def current_map(self, map_data: MapData | None) -> None:
-        """Set the mining map.
-
-        Args:
-            map_data (MapData | None): The map data.
-        """
-        self._current_map = map_data
-        if map_data is not None:
-            self._player.deploy(map_data)
-            self._player.health.reset()
-            # self._overlord.deploy(self._current_map)
-
     @property
     def home_base(self) -> HomeBase:
         """The overlord."""
@@ -72,6 +59,17 @@ class GameData:
     def total_refined(self) -> Counter:
         """The total refined minerals."""
         return self._total_refined
+
+    def set_current_map(self, map_data: MapData) -> None:
+        """Set the mining map.
+
+        Args:
+            map_data (MapData): The map data.
+        """
+        self._current_map = map_data
+        self._player.deploy(map_data)
+        self._player.health.reset()
+        # self._overlord.deploy(self._current_map)
 
     def finish_excavation(self) -> None:
         """Finish the excavation on the current map."""

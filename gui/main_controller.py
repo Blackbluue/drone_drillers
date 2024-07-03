@@ -148,4 +148,4 @@ class MainController(tk.Tk):
         for tile in iter(map_data):
             GraphicTile(self._map_frame, tile)
 
-        self._game_data.current_map = map_data
+        self._game_data.set_current_map(map_data)
