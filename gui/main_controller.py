@@ -21,7 +21,11 @@ class MainController(tk.Tk):
     """Main game controller."""
 
     def __init__(self, map_dir: str | None) -> None:
-        """Root window that contains fields for initial values."""
+        """Root window that contains fields for initial values.
+
+        Args:
+            map_dir (str | None): The directory containing the maps.
+        """
         super().__init__()
         self.title("Atron Mining Expedition")
         self._initialize_values(map_dir)
@@ -50,7 +54,11 @@ class MainController(tk.Tk):
             self._delay = value
 
     def _initialize_values(self, map_dir: str | None) -> None:
-        """Initialize game values from the GUI."""
+        """Initialize game values from the GUI.
+
+        Args:
+            map_dir (str | None): The directory containing the maps.
+        """
         configs = Configs()
         self._ticks = Counter(
             value=configs["TicksPerMap"],
