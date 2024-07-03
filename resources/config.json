@@ -10,7 +10,7 @@
     "StartingRefinedMinerals": 100,
     "StartingPlayerHealth": 100,
     "StartingPlayerCapacity": 50,
-    "StartingOverlordHealth": 10,
+    "StartingHomeBaseHealth": 10,
     "StartingDroneHealth": 100,
     "StartingDroneCapacity": 50,
     "StartingDroneMoves": 1

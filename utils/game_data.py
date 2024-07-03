@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from units.ally.overlord import Overlord
+from units.ally.home_base import HomeBase
 from units.ally.player import Player
 from utils.configs import Configs
 from utils.counter import Counter
@@ -25,8 +25,8 @@ class GameData:
         configs = Configs()
         self._current_map: MapData | None = None
         self._player = Player(root_window)
-        self._overlord = Overlord()
-        self._drones = self._overlord.drones
+        self._home_base = HomeBase()
+        self._drones = self._home_base.drones
         self._total_refined = Counter(value=configs["StartingRefinedMinerals"])
         self._total_unrefined = Counter(value=0)
 
@@ -54,9 +54,9 @@ class GameData:
             # self._overlord.deploy(self._current_map)
 
     @property
-    def overlord(self) -> Overlord:
+    def home_base(self) -> HomeBase:
         """The overlord."""
-        return self._overlord
+        return self._home_base
 
     @property
     def drones(self) -> Mapping[int, Drone]:

@@ -1,4 +1,4 @@
-"""Overlord, who oversees atron drones and assigns tasks to them."""
+"""HomeBase, which oversees atron drones and assigns tasks to them."""
 
 from __future__ import annotations
 
@@ -33,12 +33,12 @@ _NODE_WEIGHTS = {
 }
 
 
-class Overlord(Atron):
-    """Overlord, who oversees atron drones and assigns tasks to them."""
+class HomeBase(Atron):
+    """HomeBase, which oversees atron drones and assigns tasks to them."""
 
     def __init__(self) -> None:
-        """Initialize the Overlord."""
-        super().__init__(Configs()["StartingOverlordHealth"])
+        """Initialize the HomeBase."""
+        super().__init__(Configs()["StartingHomeBaseHealth"])
         self._drones: MutableMapping[int, Drone] = {}
 
         self._idle_drones: MutableSet[Drone] = set()
@@ -59,12 +59,11 @@ class Overlord(Atron):
 
     @property
     def icon(self) -> Icon:
-        """The icon of this drone type."""
         return Icon.DEPLOY_ZONE
 
     @property
     def drones(self) -> MutableMapping[int, Drone]:
-        """The drones under the overlord's control.
+        """The drones under the home base's control.
 
         The key is the drone's id and the value is the drone itself.
         """
@@ -73,13 +72,13 @@ class Overlord(Atron):
     def order_drones(self) -> str:
         """Give orders to the drones.
 
-        Makes decisions on what tasks to assign to drones. If the overlord
+        Makes decisions on what tasks to assign to drones. If the home base
         decides to deploy or retrieve a drone, it will return the action
         for the drone to perform. Otherwise, it will return an empty string.
 
 
         Returns:
-            str: The action for the overlord to perform.
+            str: The action for the home base to perform.
         """
         return ""
 
@@ -94,7 +93,7 @@ class Overlord(Atron):
             miner (Drone): The miner to task.
         """
         if not self._mad_data:
-            raise ValueError("Overlord not on map")
+            raise ValueError("HomeBase not on map")
 
         mineral = self._untasked_minerals.pop()
         self._tasked_minerals.add(mineral)
@@ -172,7 +171,7 @@ class Overlord(Atron):
             pqueue (PriorityQueue[tuple[int, Coordinate]]): Final path.
         """
         if not self._mad_data:
-            raise ValueError("Overlord not on map")
+            raise ValueError("HomeBase not on map")
 
         for neighbor_coord in neighbors:
             if (neighbor := self._mad_data.get(neighbor_coord, None)) is None:

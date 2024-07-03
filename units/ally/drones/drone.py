@@ -14,19 +14,19 @@ from utils.coordinate import Coordinate
 if TYPE_CHECKING:
     from collections.abc import MutableSequence
 
-    from units.ally.overlord import Overlord
+    from units.ally.home_base import HomeBase
 
 
 class Drone(Atron):
     """Parent class for all drone atron units."""
 
-    def __init__(self, overlord: Overlord) -> None:
+    def __init__(self, home_base: HomeBase) -> None:
         """Initialize a Drone."""
         configs = Configs()
         super().__init__(
             configs["StartingDroneHealth"], configs["StartingDroneCapacity"]
         )
-        self._overlord = overlord
+        self._home_base = home_base
         self._moves = configs["StartingDroneMoves"]
         self._path_to_goal: MutableSequence[Coordinate] = []
 
@@ -59,7 +59,7 @@ class Drone(Atron):
     def action(self, context: Context) -> str:
         """Perform some action, based on the type of drone.
 
-        The drone will internally have it's own orders set by the overlord.
+        The drone will internally have it's own orders set by the home base.
         These orders may take the context into account.
 
         Args:

@@ -97,23 +97,23 @@ class MainController(tk.Tk):
         if not (map_data := self._game_data.current_map):
             return
 
-        overlord = self._game_data.overlord
-        action, _, opts = overlord.order_drones().partition(" ")
+        home_base = self._game_data.home_base
+        action, _, opts = home_base.order_drones().partition(" ")
         match action:
             case "RETURN":
                 drone_id = next(map(int, opts.split()))
-                overlord.drones[drone_id].undeploy()
+                home_base.drones[drone_id].undeploy()
             case "DEPLOY":
                 drone_id, _ = map(int, opts.split())
                 # check if drone is already deployed
-                overlord.drones[drone_id].deploy(map_data)
+                home_base.drones[drone_id].deploy(map_data)
             case "":
                 pass  # Do nothing
             case _:  # Ignore other actions
                 print(f"Unknown action: {action}", file=sys.stderr)
 
         deployed_drones = list(
-            filter(lambda drone: drone.deployed, overlord.drones.values())
+            filter(lambda drone: drone.deployed, home_base.drones.values())
         )
         map_data.tick(deployed_drones)
         print(map_data, file=sys.stderr)
