@@ -5,8 +5,10 @@
 import argparse
 import os.path
 import sys
+from contextlib import suppress
 
 from gui.main_controller import MainController
+from utils.configs import Configs
 
 
 def get_args() -> argparse.Namespace:
@@ -31,7 +33,8 @@ def main() -> None:
     """Collect settings from the command line and start the game."""
     args = get_args()
     map_directory: str | None = args.map_directory
-    print(f"Starting game with map directory: {map_directory}")
+    Configs.set_path("./resources/config.json")
+    Configs.load()
     MainController(map_directory).mainloop()
 
 
@@ -40,3 +43,6 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt as e:
         print(f"Exiting due to interrupt: {e}", file=sys.stderr)
+    finally:
+        with suppress(OSError):
+            Configs.save()

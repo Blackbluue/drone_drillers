@@ -1,0 +1,18 @@
+{
+    "FastDelay": 500,
+    "MaximumAcidDensity": 0.1,
+    "MaximumMineralDensity": 0.5,
+    "MaximumRandomMapDimension": 20,
+    "MinimumMineralDensity": 0.1,
+    "MinimumRandomMapDimension": 10,
+    "NoDelay": 0,
+    "NormalDelay": 1000,
+    "StartingDroneCapacity": 50,
+    "StartingDroneHealth": 100,
+    "StartingDroneMoves": 1,
+    "StartingOverlordHealth": 10,
+    "StartingPlayerCapacity": 50,
+    "StartingPlayerHealth": 100,
+    "StartingRefinedMinerals": 100,
+    "TicksPerMap": 100
+}
