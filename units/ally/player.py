@@ -82,7 +82,7 @@ class Player(Atron):
             if self.health.get() <= 0:
                 self._window.event_generate("<<PlayerDied>>")
                 return
-        if curr_spot == Icon.DEPLOY_ZONE:
+        if curr_spot == Icon.HOME_BASE:
             self._window.event_generate("<<PlayerReturned>>")
         else:
             self._window.event_generate("<<PlayerMoved>>")

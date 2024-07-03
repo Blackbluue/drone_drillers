@@ -85,7 +85,7 @@ class MapData:
                     match icon:
                         case Icon.ACID:
                             self._acid.append(coord)
-                        case Icon.DEPLOY_ZONE:
+                        case Icon.HOME_BASE:
                             self._landing_zone = coord
                         case Icon.MINERAL:
                             self._total_minerals[coord] = int(char)
@@ -110,7 +110,7 @@ class MapData:
         self._create_box(width, height)
 
         self._landing_zone = self._get_rand_coords()
-        self[self._landing_zone] = Icon.DEPLOY_ZONE
+        self[self._landing_zone] = Icon.HOME_BASE
 
         wall_count = ((width * 2) + (height * 2)) - 4
         total_coordinates = self._width * self._height
@@ -209,7 +209,7 @@ class MapData:
         Args:
             atron (Atron): The atron to add to the map.
         """
-        if self[self._landing_zone].surface != Icon.DEPLOY_ZONE:
+        if self[self._landing_zone].surface != Icon.HOME_BASE:
             raise ValueError("Landing zone is occupied")
 
         atron.context = self.build_context(self._landing_zone)
@@ -342,7 +342,7 @@ class MapData:
             pos (Coordinate): The coordinates of the tile to update.
         """
         if pos == self._landing_zone:
-            self[pos] = Icon.DEPLOY_ZONE
+            self[pos] = Icon.HOME_BASE
         elif pos in self._acid:
             self[pos] = Icon.ACID
         else:

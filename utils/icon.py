@@ -7,12 +7,12 @@ from typing import Mapping
 class Icon(Enum):
     """An icon on the map."""
 
+    HOME_BASE = "_"
     ATRON = "A"
     SCOUT = "S"
     MINER = "M"
     PLAYER = "P"
     WALL = "#"
-    DEPLOY_ZONE = "_"
     MINERAL = "*"
     ACID = "~"
     EMPTY = " "
@@ -24,7 +24,7 @@ class Icon(Enum):
         Returns:
             bool: True if traversable, else False.
         """
-        return self in [Icon.DEPLOY_ZONE, Icon.ACID, Icon.EMPTY]
+        return self in [Icon.HOME_BASE, Icon.ACID, Icon.EMPTY]
 
     def health_cost(self) -> int:
         """Return the health cost for traversing over this tile.
@@ -51,12 +51,12 @@ class Icon(Enum):
             str: The icon as a unicode character.
         """
         return {
+            Icon.HOME_BASE: "\u02c5",
             Icon.ATRON: "\u00C4",
             Icon.SCOUT: "\u00A7",
             Icon.MINER: "\u00A3",
             Icon.PLAYER: "\u20B1",
             Icon.WALL: "\u039E",
-            Icon.DEPLOY_ZONE: "\u02c5",
             Icon.MINERAL: "\u0275",
             Icon.ACID: "\u05e1",
             Icon.EMPTY: " ",

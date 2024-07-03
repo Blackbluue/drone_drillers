@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 _NODE_WEIGHTS = {
     Icon.EMPTY: 1,
     Icon.ATRON: 1,
-    Icon.DEPLOY_ZONE: 1,
+    Icon.HOME_BASE: 1,
     Icon.ACID: 10,
     None: 1,
 }
@@ -59,7 +59,7 @@ class HomeBase(Atron):
 
     @property
     def icon(self) -> Icon:
-        return Icon.DEPLOY_ZONE
+        return Icon.HOME_BASE
 
     @property
     def drones(self) -> MutableMapping[int, Drone]:
