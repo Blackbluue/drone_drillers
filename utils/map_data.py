@@ -5,6 +5,8 @@ from __future__ import annotations
 from random import randint, uniform
 from typing import TYPE_CHECKING
 
+from utils.configs import Configs
+
 from .context import Context
 from .coordinate import Coordinate
 from .directions import Directions
@@ -25,20 +27,13 @@ if TYPE_CHECKING:
 
 DEFAULT_LANDING_ZONE = Coordinate(-1, -1)
 
-MIN_DIMENSION = 10
-MAX_DIMENSION = 20
-
-MIN_DENSITY = 0.1
-MAX_DENSITY = 0.5
-
-ACID_DENSITY = 0.1
-
 
 class MapData:
     """A map object, used to describe the tile layout of an area."""
 
     def __init__(self, map_file: str | None) -> None:
         """Initialize a Map object."""
+        self._configs = Configs()
         self._width = 0
         self._height = 0
         self._landing_zone: Coordinate = DEFAULT_LANDING_ZONE
@@ -49,9 +44,18 @@ class MapData:
             self._with_file(map_file)
         else:
             self._no_file(
-                randint(MIN_DIMENSION, MAX_DIMENSION),
-                randint(MIN_DIMENSION, MAX_DIMENSION),
-                uniform(MIN_DENSITY, MAX_DENSITY),
+                randint(
+                    self._configs["MinimumRandomMapDimension"],
+                    self._configs["MaximumRandomMapDimension"],
+                ),
+                randint(
+                    self._configs["MinimumRandomMapDimension"],
+                    self._configs["MaximumRandomMapDimension"],
+                ),
+                uniform(
+                    self._configs["MinimumMineralDensity"],
+                    self._configs["MaximumMineralDensity"],
+                ),
             )
 
     @property
@@ -115,7 +119,7 @@ class MapData:
             self._add_mineral()
 
         total_acid = int(
-            ACID_DENSITY
+            self._configs["MaximumAcidDensity"]
             * (total_coordinates - len(self._total_minerals) - wall_count)
         )
         for _ in range(total_acid):

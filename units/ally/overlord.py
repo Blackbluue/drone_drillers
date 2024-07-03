@@ -6,6 +6,7 @@ from queue import PriorityQueue, SimpleQueue
 from typing import TYPE_CHECKING
 
 from utils import Context, Icon
+from utils.configs import Configs
 
 from .atron import Atron
 from .drones import Drone
@@ -20,7 +21,6 @@ if TYPE_CHECKING:
 
     from utils import Coordinate, MapData
 
-DEFAULT_HEALTH = 10
 
 _NODE_WEIGHTS = {
     Icon.EMPTY: 1,
@@ -36,7 +36,7 @@ class Overlord(Atron):
 
     def __init__(self) -> None:
         """Initialize the Overlord."""
-        super().__init__(DEFAULT_HEALTH)
+        super().__init__(Configs()["StartingOverlordHealth"])
         self.drones: MutableMapping[int, Drone] = {}
         # a drone id as key and drone as value
 

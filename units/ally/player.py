@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from units.ally.atron import Atron
 from utils import Icon
+from utils.configs import Configs
 from utils.directions import Directions
 
 if TYPE_CHECKING:
@@ -13,15 +14,15 @@ if TYPE_CHECKING:
 
     from utils.map_data import MapData
 
-DEFAULT_HEALTH = 100
-DEFAULT_CAPACITY = 50
-
 
 class Player(Atron):
     """Player unit class."""
 
     def __init__(self, root_window: Tk) -> None:
-        super().__init__(DEFAULT_HEALTH, DEFAULT_CAPACITY)
+        configs = Configs()
+        super().__init__(
+            configs["StartingPlayerHealth"], configs["StartingPlayerCapacity"]
+        )
         self._window: Tk = root_window
         self._map_data: MapData | None = None
         self._l_bind: str | None = None

@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 from units.ally.atron import Atron
 from utils import Context, Coordinate
+from utils.configs import Configs
 
 if TYPE_CHECKING:
     from collections.abc import MutableSequence
@@ -15,19 +16,17 @@ if TYPE_CHECKING:
     from units.ally.overlord import Overlord
 
 
-DEFAULT_HEALTH = 40
-DEFAULT_CAPACITY = 10
-DEFAULT_MOVES = 1
-
-
 class Drone(Atron):
     """Parent class for all drone atron units."""
 
     def __init__(self, overlord: Overlord) -> None:
         """Initialize a Drone."""
-        super().__init__(DEFAULT_HEALTH, DEFAULT_CAPACITY)
+        configs = Configs()
+        super().__init__(
+            configs["StartingDroneHealth"], configs["StartingDroneCapacity"]
+        )
         self._overlord = overlord
-        self._moves = DEFAULT_MOVES
+        self._moves = configs["StartingDroneMoves"]
         self._path_to_goal: MutableSequence[Coordinate] = []
 
     @property

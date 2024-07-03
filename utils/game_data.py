@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from units.ally import Overlord, Player
+from utils.configs import Configs
 from utils.counter import Counter
 
 if TYPE_CHECKING:
@@ -15,18 +16,17 @@ if TYPE_CHECKING:
     from units.ally.drones import Drone
     from utils import MapData
 
-STARTING_REFINED = 100
-
 
 class GameData:
     """Store game data."""
 
     def __init__(self, root_window: Tk) -> None:
+        configs = Configs()
         self._current_map: MapData | None = None
         self._player = Player(root_window)
         self._overlord = Overlord()
         self._drones = self._overlord.drones
-        self._total_refined = Counter(value=STARTING_REFINED)
+        self._total_refined = Counter(value=configs["StartingRefinedMinerals"])
         self._total_unrefined = Counter(value=0)
 
     @property

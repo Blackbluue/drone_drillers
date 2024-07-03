@@ -9,14 +9,13 @@ import tkinter as tk
 from time import sleep
 
 from utils import MapData
+from utils.configs import Configs
 from utils.counter import Counter
 from utils.game_data import GameData
 
 from .dashboard import Dashboard
 from .graphic_tile import GraphicTile
 
-DEFAULT_TICKS = 100
-DEFAULT_REFINED = 100
 NO_DELAY = 0
 
 
@@ -54,8 +53,12 @@ class MainController(tk.Tk):
 
     def _initialize_values(self, map_dir: str | None) -> None:
         """Initialize game values from the GUI."""
-        self._ticks = Counter(value=DEFAULT_TICKS, max_value=DEFAULT_TICKS)
-        self._delay = 0
+        configs = Configs()
+        self._ticks = Counter(
+            value=configs["TicksPerMap"],
+            max_value=configs["TicksPerMap"],
+        )
+        self._delay = NO_DELAY
         self._start_button = tk.Button(
             self, command=self._start_button_handler, text="Start"
         )
