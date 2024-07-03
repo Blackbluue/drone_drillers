@@ -28,7 +28,7 @@ class Configs:
     @classmethod
     def save(cls) -> None:
         with open(cls._path, "w") as f:
-            json.dump(cls._configs, f, indent=4, sort_keys=True)
+            json.dump(cls._configs, f, indent=4)
 
     def __getitem__(self, key: str) -> Any:
         return self._configs[key]
