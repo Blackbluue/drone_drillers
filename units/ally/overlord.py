@@ -37,10 +37,9 @@ class Overlord(Atron):
     def __init__(self) -> None:
         """Initialize the Overlord."""
         super().__init__(Configs()["StartingOverlordHealth"])
-        self.drones: MutableMapping[int, Drone] = {}
-        # a drone id as key and drone as value
+        self._drones: MutableMapping[int, Drone] = {}
 
-        self._idle_drones: MutableMapping[type[Drone], MutableSet[Drone]] = {}
+        self._idle_drones: MutableSet[Drone] = set()
         self._update_queue: SimpleQueue[tuple[MapData, Drone, Context]] = (
             SimpleQueue()
         )
@@ -49,7 +48,7 @@ class Overlord(Atron):
         self._pickup_queue: SimpleQueue[tuple[MapData, Drone]] = SimpleQueue()
         # a queue of pick up requests from drones
 
-        self._mining_map: MapData | None = None
+        self._mad_data: MapData | None = None
         # the current mining map
         self._untasked_minerals: MutableSet[Coordinate] = set()
         # a set of the coords of untasked minerals
@@ -61,14 +60,13 @@ class Overlord(Atron):
         """The icon of this drone type."""
         return Icon.DEPLOY_ZONE
 
-    def deploy(self, map_data: MapData) -> None:
-        """Deploy the overlord on the map.
+    @property
+    def drones(self) -> MutableMapping[int, Drone]:
+        """The drones under the overlord's control.
 
-        Args:
-            map_data (MapData): The map to deploy the overlord on.
+        The key is the drone's id and the value is the drone itself.
         """
-        super().deploy(map_data)
-        self._mining_map = map_data
+        return self._drones
 
     def order_drones(self) -> str:
         """Give orders to the drones.
@@ -93,12 +91,12 @@ class Overlord(Atron):
         Args:
             miner (Drone): The miner to task.
         """
-        if not self._mining_map:
+        if not self._mad_data:
             raise ValueError("Overlord not on map")
 
         mineral = self._untasked_minerals.pop()
         self._tasked_minerals.add(mineral)
-        miner.path = self._dijkstra(self._mining_map.landing_zone, mineral)
+        miner.path = self._dijkstra(self._mad_data.landing_zone, mineral)
 
     def _dijkstra(
         self, start: Coordinate, end: Coordinate
@@ -171,13 +169,11 @@ class Overlord(Atron):
             parents_map (MutableMapping[Coordinate, Coordinate]): Map of path.
             pqueue (PriorityQueue[tuple[int, Coordinate]]): Final path.
         """
-        if not self._mining_map:
+        if not self._mad_data:
             raise ValueError("Overlord not on map")
 
         for neighbor_coord in neighbors:
-            if (
-                neighbor := self._mining_map.get(neighbor_coord, None)
-            ) is None:
+            if (neighbor := self._mad_data.get(neighbor_coord, None)) is None:
                 # tile not in map
                 continue
             if neighbor.surface and neighbor.surface not in _NODE_WEIGHTS:

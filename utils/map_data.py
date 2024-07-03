@@ -183,17 +183,13 @@ class MapData:
             tiles.extend(list(filter(lambda tile: tile.discovered.get(), row)))
         return tiles
 
-    def remove_atron(self, atron: Atron) -> int:
-        """Removes atron from map and returns the mined minerals.
+    def remove_atron(self, atron: Atron) -> None:
+        """Removes atron from map.
 
         Args:
             atron (Atron): The atron to be removed.
-
-        Returns:
-            int: The mined mineral count.
         """
         self._clear_tile(atron.context.center.coordinate)
-        return atron.undeploy()
 
     def reveal_tile(self, coord: Coordinate) -> None:
         """Reveal a tile on the map.

@@ -79,7 +79,7 @@ class GameData:
 
         self._total_refined.count(self._total_unrefined.get())
         self._total_unrefined.reset()
-        self._current_map.remove_atron(self._player)
+        self._player.undeploy()
         self._current_map = None
 
     def collect_minerals(self, atron: Atron) -> None:

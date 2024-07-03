@@ -24,7 +24,6 @@ class Player(Atron):
             configs["StartingPlayerHealth"], configs["StartingPlayerCapacity"]
         )
         self._window: Tk = root_window
-        self._map_data: MapData | None = None
         self._l_bind: str | None = None
         self._r_bind: str | None = None
         self._u_bind: str | None = None
@@ -43,15 +42,12 @@ class Player(Atron):
             map_data (MapData): The map to deploy the player on.
         """
         super().deploy(map_data)
-        self._map_data = map_data
         self.set_controls()
 
     def undeploy(self) -> int:
         """Retrieve the player from the map."""
-        payload = super().undeploy()
         self.unset_controls()
-        self._map_data = None
-        return payload
+        return super().undeploy()
 
     def move_player(self, event: Event) -> None:
         """Move the player on the map.

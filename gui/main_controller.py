@@ -96,11 +96,11 @@ class MainController(tk.Tk):
         match action:
             case "RETURN":
                 drone_id = next(map(int, opts.split()))
-                map_data.remove_atron(overlord.drones[drone_id])
+                overlord.drones[drone_id].undeploy()
             case "DEPLOY":
                 drone_id, _ = map(int, opts.split())
                 # check if drone is already deployed
-                map_data.deploy_atron(overlord.drones[drone_id])
+                overlord.drones[drone_id].deploy(map_data)
             case "":
                 pass  # Do nothing
             case _:  # Ignore other actions

@@ -31,6 +31,7 @@ class Atron(ABC):
         self._health = Counter(value=health, max_value=health)
         self._payload = Counter(value=0, max_value=capacity)
         self._context: Context | None = None
+        self._map_data: MapData | None = None
 
     @property
     def health(self) -> Counter:
@@ -57,7 +58,7 @@ class Atron(ABC):
         Returns:
             bool: True if deployed, False otherwise.
         """
-        return self._context is not None
+        return self._map_data is not None
 
     @property
     def context(self) -> Context:
@@ -102,6 +103,7 @@ class Atron(ABC):
             map_window (MapWindow): The map window to deploy the atron on.
         """
         map_data.deploy_atron(self)
+        self._map_data = map_data
 
     def undeploy(self) -> int:
         """Retrieve the atron from the map and extract the payload.
@@ -109,9 +111,11 @@ class Atron(ABC):
         Returns:
             int: The payload of this atron.
         """
-        if not self.deployed:
+        if self._map_data is None:
             return 0
+        self._map_data.remove_atron(self)
         self._context = None
+        self._map_data = None
         return self.extract_minerals()
 
     def __str__(self) -> str:
