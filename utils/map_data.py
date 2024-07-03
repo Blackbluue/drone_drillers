@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     )
 
     from units.ally.atron import Atron
-    from units.ally.drones import Drone
+    from units.ally.drones.drone import Drone
 
 DEFAULT_LANDING_ZONE = Coordinate(-1, -1)
 

@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from units.ally.atron import Atron
-from utils import Icon
 from utils.configs import Configs
 from utils.directions import Directions
+from utils.icon import Icon
 
 if TYPE_CHECKING:
     from tkinter import Event, Tk

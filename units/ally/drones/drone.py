@@ -7,8 +7,9 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 from units.ally.atron import Atron
-from utils import Context, Coordinate
 from utils.configs import Configs
+from utils.context import Context
+from utils.coordinate import Coordinate
 
 if TYPE_CHECKING:
     from collections.abc import MutableSequence

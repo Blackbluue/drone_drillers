@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from units.ally import Overlord, Player
+from units.ally.overlord import Overlord
+from units.ally.player import Player
 from utils.configs import Configs
 from utils.counter import Counter
 
@@ -13,8 +14,8 @@ if TYPE_CHECKING:
     from tkinter import Tk
 
     from units.ally.atron import Atron
-    from units.ally.drones import Drone
-    from utils import MapData
+    from units.ally.drones.drone import Drone
+    from utils.map_data import MapData
 
 
 class GameData:

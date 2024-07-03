@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from .icon_var import IconVar
 
 if TYPE_CHECKING:
-    from units.ally import Atron
+    from units.ally.atron import Atron
 
     from .coordinate import Coordinate
     from .icon import Icon

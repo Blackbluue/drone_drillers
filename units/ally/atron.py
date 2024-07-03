@@ -5,7 +5,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from utils import Context, Counter, Icon
+from utils.context import Context
+from utils.counter import Counter
+from utils.icon import Icon
 
 if TYPE_CHECKING:
     from utils.map_data import MapData

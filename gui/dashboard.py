@@ -5,16 +5,16 @@ from __future__ import annotations
 from tkinter import ttk
 from typing import TYPE_CHECKING
 
+from gui.label_counter import LabeledCounter
 from utils.configs import Configs
-
-from .label_counter import LabeledCounter
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Mapping
 
     from gui.main_controller import MainController
-    from units.ally import Atron, Player
-    from units.ally.drones import Drone
+    from units.ally.atron import Atron
+    from units.ally.drones.drone import Drone
+    from units.ally.player import Player
     from utils.counter import Counter
     from utils.game_data import GameData
 

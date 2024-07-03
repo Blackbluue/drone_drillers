@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import tkinter as tk
 
-from utils import Counter
+from utils.counter import Counter
 
 
 class LabeledCounter(tk.Frame):

@@ -5,11 +5,12 @@ from __future__ import annotations
 from queue import PriorityQueue, SimpleQueue
 from typing import TYPE_CHECKING
 
-from utils import Context, Icon
 from utils.configs import Configs
+from utils.context import Context
+from utils.icon import Icon
 
 from .atron import Atron
-from .drones import Drone
+from .drones.drone import Drone
 
 if TYPE_CHECKING:
     from collections.abc import (
@@ -19,7 +20,8 @@ if TYPE_CHECKING:
         MutableSet,
     )
 
-    from utils import Coordinate, MapData
+    from utils.coordinate import Coordinate
+    from utils.map_data import MapData
 
 
 _NODE_WEIGHTS = {

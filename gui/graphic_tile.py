@@ -5,7 +5,7 @@ from __future__ import annotations
 from tkinter import Label
 from typing import TYPE_CHECKING
 
-from utils import Icon
+from utils.icon import Icon
 from utils.icon_var import IconVar
 
 if TYPE_CHECKING:

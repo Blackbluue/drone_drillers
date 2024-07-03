@@ -6,15 +6,13 @@ import os
 import random
 import sys
 import tkinter as tk
-from time import sleep
 
-from utils import MapData
+from gui.dashboard import Dashboard
+from gui.graphic_tile import GraphicTile
 from utils.configs import Configs
 from utils.counter import Counter
 from utils.game_data import GameData
-
-from .dashboard import Dashboard
-from .graphic_tile import GraphicTile
+from utils.map_data import MapData
 
 NO_DELAY = 0
 
