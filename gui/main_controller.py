@@ -12,6 +12,7 @@ from gui.graphic_tile import GraphicTile
 from utils.configs import Configs
 from utils.counter import Counter
 from utils.game_data import GameData
+from utils.icon import Icon
 from utils.map_data import MapData
 
 NO_DELAY = 0
@@ -83,8 +84,6 @@ class MainController(tk.Tk):
         self._dashboard.pack()
 
         self.bind("<<PlayerMoved>>", self._process_tick, add=True)
-        self.bind("<<PlayerReturned>>", self._extract_player, add=True)
-        self.bind("<<PlayerDied>>", self._player_died, add=True)
 
     def _start_button_handler(self) -> None:
         """Start the game."""
@@ -96,6 +95,13 @@ class MainController(tk.Tk):
         """Process a tick of the game."""
         if not (map_data := self._game_data.current_map):
             return
+
+        player = self._game_data.player
+        if player.terrain_health_adjust():
+            self._game_data.finish_excavation()
+            return
+        if player.context.center.terrain == Icon.HOME_BASE:
+            self._game_data.collect_minerals(player)
 
         home_base = self._game_data.home_base
         action, _, opts = home_base.order_drones().partition(" ")
@@ -124,15 +130,6 @@ class MainController(tk.Tk):
             self.after(
                 self._delay, lambda: self.event_generate("<<PlayerMoved>>")
             )
-
-    def _extract_player(self, _) -> None:
-        """Extract the player from the map."""
-        self._game_data.collect_minerals(self._game_data.player)
-        self.event_generate("<<PlayerMoved>>")
-
-    def _player_died(self, _) -> None:
-        """Handle the player's death."""
-        self._game_data.finish_excavation()
 
     def _set_new_map(self) -> None:
         """Set the mining map."""

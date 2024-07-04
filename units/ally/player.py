@@ -76,16 +76,17 @@ class Player(Atron):
                 direction
             )
             self._map_data.move_to(self, new_location)
-        curr_spot = self.context.center.terrain
-        if health_adjust := curr_spot.health_cost():
+        self._window.event_generate("<<PlayerMoved>>")
+
+    def terrain_health_adjust(self) -> bool:
+        """Adjust the player's health based on the terrain.
+
+        Returns:
+            bool: True if the player has died, False otherwise.
+        """
+        if health_adjust := self.context.center.terrain.health_cost():
             self.health.count(health_adjust)
-            if self.health.get() <= 0:
-                self._window.event_generate("<<PlayerDied>>")
-                return
-        if curr_spot == Icon.HOME_BASE:
-            self._window.event_generate("<<PlayerReturned>>")
-        else:
-            self._window.event_generate("<<PlayerMoved>>")
+        return self.health.get() <= 0
 
     def set_controls(self) -> None:
         """Set the controls for the player."""
