@@ -213,7 +213,7 @@ class MapData:
             raise ValueError("Landing zone is occupied")
 
         atron.context = self.build_context(self._landing_zone)
-        self[self._landing_zone].occupied_drone = atron
+        self[self._landing_zone].occupy(atron)
         self.reveal_tile(self._landing_zone)
         for coord in self._landing_zone.cardinals():
             self.reveal_tile(coord)
@@ -327,9 +327,9 @@ class MapData:
             atron (Atron): The atron to move.
             new_location (Coordinate): The new location to move the atron to.
         """
-        self[atron.context.center.coordinate].occupied_drone = None
+        self[atron.context.center.coordinate].unoccupy()
         self._clear_tile(atron.context.center.coordinate)
-        self[new_location].occupied_drone = atron
+        self[new_location].occupy(atron)
         atron.context = self.build_context(new_location)
         self.reveal_tile(new_location)
         for coord in new_location.cardinals():

@@ -84,14 +84,7 @@ class Tile:
         """The atron occupying this tile, which may be None."""
         return self._occupation
 
-    @occupied_drone.setter
-    def occupied_drone(self, atron: Atron | None) -> None:
-        if atron:
-            self._occupy(atron)
-        else:
-            self._unoccupy()
-
-    def _occupy(self, atron: Atron) -> bool:
+    def occupy(self, atron: Atron) -> bool:
         """Occupy this tile with an atron.
 
         An occupied tile will return an atron icon for the icon property. An
@@ -115,7 +108,7 @@ class Tile:
         self._surface.set(atron.icon)
         return True
 
-    def _unoccupy(self) -> bool:
+    def unoccupy(self) -> bool:
         """Unoccupy this tile with an atron.
 
         Unoccupying a tile will cause the original icon on the tile to returned
