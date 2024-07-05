@@ -183,14 +183,6 @@ class MapData:
             tiles.extend(list(filter(lambda tile: tile.discovered.get(), row)))
         return tiles
 
-    def remove_atron(self, atron: Atron) -> None:
-        """Removes atron from map.
-
-        Args:
-            atron (Atron): The atron to be removed.
-        """
-        self._clear_tile(atron.context.center.coordinate)
-
     def reveal_tile(self, coord: Coordinate) -> None:
         """Reveal a tile on the map.
 
@@ -239,7 +231,7 @@ class MapData:
                 self._total_minerals[new_location] -= 1
                 atron.payload.count(1)
                 if self._total_minerals[new_location] <= 0:
-                    self._clear_tile(new_location)
+                    self[new_location].clear_surface()
                     del self._total_minerals[new_location]
 
     def tick(self, drones: Iterable[Drone]) -> None:
@@ -250,7 +242,7 @@ class MapData:
                 if drone.context.center.coordinate in self._acid:
                     drone.health.count(Icon.ACID.health_cost())
                 if drone.health.get() <= 0:
-                    self._clear_tile(drone.context.center.coordinate)
+                    drone.context.center.clear_surface()
                     drone.undeploy()  # mined minerals lost
                     break  # atron is dead move on to next
 
@@ -328,25 +320,12 @@ class MapData:
             new_location (Coordinate): The new location to move the atron to.
         """
         self[atron.context.center.coordinate].unoccupy()
-        self._clear_tile(atron.context.center.coordinate)
+        atron.context.center.clear_surface()
         self[new_location].occupy(atron)
         atron.context = self.build_context(new_location)
         self.reveal_tile(new_location)
         for coord in new_location.cardinals():
             self.reveal_tile(coord)
-
-    def _clear_tile(self, pos: Coordinate) -> None:
-        """Clear the tile at the given coordinates.
-
-        Args:
-            pos (Coordinate): The coordinates of the tile to update.
-        """
-        if pos == self._landing_zone:
-            self[pos] = Icon.HOME_BASE
-        elif pos in self._acid:
-            self[pos] = Icon.ACID
-        else:
-            self[pos] = Icon.EMPTY
 
     def __getitem__(self, key: Coordinate) -> Tile:
         """Get the tile with the specified coordinates from the map.

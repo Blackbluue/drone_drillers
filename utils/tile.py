@@ -84,6 +84,10 @@ class Tile:
         """The atron occupying this tile, which may be None."""
         return self._occupation
 
+    def clear_surface(self) -> None:
+        """Clear the surface icon of this tile."""
+        self._surface.set(self._terrain.get())
+
     def occupy(self, atron: Atron) -> bool:
         """Occupy this tile with an atron.
 

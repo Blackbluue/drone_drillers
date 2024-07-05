@@ -115,7 +115,7 @@ class Atron(ABC):
         """
         if self._map_data is None:
             return 0
-        self._map_data.remove_atron(self)
+        self.context.center.clear_surface()
         self._context = None
         self._map_data = None
         return self.extract_minerals()
