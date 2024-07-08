@@ -19,6 +19,7 @@ if TYPE_CHECKING:
         Iterator,
         MutableMapping,
         MutableSequence,
+        MutableSet,
         Sequence,
     )
 
@@ -40,7 +41,7 @@ class MapData:
         self._landing_zone: Coordinate = DEFAULT_LANDING_ZONE
         self._all_tiles: list[MutableSequence[Tile]] = []
         self._total_minerals: MutableMapping[Coordinate, int] = {}
-        self._acid: MutableSequence[Coordinate] = []
+        self._acid: MutableSet[Coordinate] = set()
         if map_file:
             self._with_file(map_file)
         else:
@@ -82,16 +83,22 @@ class MapData:
                 for column, char in enumerate(characters):
                     cur_width += 1
                     coord = Coordinate(column, row)
+                    surface, terrain = Icon.EMPTY, Icon.EMPTY
                     icon = Icon.MINERAL if char.isdigit() else Icon(char)
                     match icon:
-                        case Icon.ACID:
-                            self._acid.append(coord)
                         case Icon.HOME_BASE:
                             self._landing_zone = coord
-                            icon = Icon.EMPTY
                         case Icon.MINERAL:
                             self._total_minerals[coord] = int(char)
-                    tile_row.append(Tile(coord, icon))
+                            surface = icon
+                        case Icon.ACID:
+                            self._acid.add(coord)
+                            terrain = icon
+                        case Icon.WALL:
+                            surface = icon
+                        case _:  # ignore unknown characters
+                            pass
+                    tile_row.append(Tile(coord, surface, terrain))
                 self._width = max(self._width, cur_width)
 
                 self._all_tiles.append(tile_row)
@@ -286,14 +293,16 @@ class MapData:
 
         for row in range(self._height):
             #  first/last columns are always a wall
-            tile_row = [Tile(Coordinate(0, row), Icon.WALL)]
+            tile_row = [Tile(Coordinate(0, row), surface=Icon.WALL)]
             for column in range(1, self._width - 1):
                 coord = Coordinate(column, row)
                 if row in [0, self._height - 1]:  # build top/bottom walls
-                    tile_row.append(Tile(coord, Icon.WALL))
+                    tile_row.append(Tile(coord, surface=Icon.WALL))
                 else:  # build empty space between walls
-                    tile_row.append(Tile(coord, Icon.EMPTY))
-            tile_row.append(Tile(Coordinate(self._width - 1, row), Icon.WALL))
+                    tile_row.append(Tile(coord))
+            tile_row.append(
+                Tile(Coordinate(self._width - 1, row), surface=Icon.WALL)
+            )
 
             self._all_tiles.append(tile_row)
 
@@ -302,15 +311,15 @@ class MapData:
         while (coordinates := self._get_rand_coords()) == self._landing_zone:
             pass
 
-        self[coordinates] = Icon.MINERAL
+        self[coordinates].surface = Icon.MINERAL
         self._total_minerals[coordinates] = randint(1, 9)
 
     def _add_acid(self) -> None:
         """Adds a single acid tile to a random open spot in the map."""
         coordinates = self._get_rand_coords()
 
-        self[coordinates] = Icon.ACID
-        self._acid.append(coordinates)
+        self[coordinates].terrain = Icon.ACID
+        self._acid.add(coordinates)
 
     def _get_rand_coords(self) -> Coordinate:
         """Get a random set of coordinates on the map.
@@ -357,15 +366,6 @@ class MapData:
             Tile: The Tile within this map.
         """
         return self._all_tiles[key.y][key.x]
-
-    def __setitem__(self, coord: Coordinate, icon: Icon) -> None:
-        """Set the actual icon of a tile at the given coordinates.
-
-        Args:
-            coord (Coordinate): The coordinates to set.
-            icon (Icon): The icon to set.
-        """
-        self._all_tiles[coord.y][coord.x].surface = icon
 
     def __iter__(self) -> Iterator[Tile]:
         """Iterate over the visible tiles in this map.

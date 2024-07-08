@@ -5,19 +5,24 @@ from __future__ import annotations
 from tkinter import BooleanVar
 from typing import TYPE_CHECKING
 
+from .icon import Icon
 from .icon_var import IconVar
 
 if TYPE_CHECKING:
     from units.ally.atron import Atron
 
     from .coordinate import Coordinate
-    from .icon import Icon
 
 
 class Tile:
     """A single tile on the map."""
 
-    def __init__(self, coordinate: Coordinate, icon: Icon) -> None:
+    def __init__(
+        self,
+        coordinate: Coordinate,
+        surface: Icon = Icon.EMPTY,
+        terrain: Icon = Icon.EMPTY,
+    ) -> None:
         """Initialize the tile.
 
         Args:
@@ -25,8 +30,8 @@ class Tile:
             icon (Icon): The icon on this tile.
         """
         self._coordinate = coordinate
-        self._surface = IconVar(value=icon)
-        self._terrain = IconVar(value=icon)
+        self._surface = IconVar(value=surface)
+        self._terrain = IconVar(value=terrain)
         self._discovered = BooleanVar(value=False)
         self._occupation: Atron | None = None
 
@@ -49,8 +54,6 @@ class Tile:
     @surface.setter
     def surface(self, icon: Icon) -> None:
         self._surface.set(icon)
-        if icon.traversable():
-            self._terrain.set(icon)
 
     @property
     def surface_var(self) -> IconVar:
