@@ -69,6 +69,10 @@ class HomeBase(Atron):
         """
         return self._drones
 
+    def deploy(self, map_data: MapData) -> None:
+        map_data.deploy_home_base(self)
+        self._map_data = map_data
+
     def order_drones(self) -> str:
         """Give orders to the drones.
 

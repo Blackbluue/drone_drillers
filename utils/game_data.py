@@ -67,9 +67,9 @@ class GameData:
             map_data (MapData): The map data.
         """
         self._current_map = map_data
+        self._home_base.deploy(self._current_map)
         self._player.deploy(map_data)
         self._player.health.reset()
-        # self._overlord.deploy(self._current_map)
 
     def finish_excavation(self) -> None:
         """Finish the excavation on the current map."""

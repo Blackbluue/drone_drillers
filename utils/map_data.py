@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 
     from units.ally.atron import Atron
     from units.ally.drones.drone import Drone
+    from units.ally.home_base import HomeBase
 
 DEFAULT_LANDING_ZONE = Coordinate(-1, -1)
 
@@ -75,10 +76,10 @@ class MapData:
         with open(filename, encoding="utf-8") as file_handle:
             for row, line in enumerate(file_handle):
                 self._height += 1
-                destination = list(line.rstrip())
+                characters = list(line.rstrip())
                 cur_width = 0
                 tile_row: MutableSequence[Tile] = []
-                for column, char in enumerate(destination):
+                for column, char in enumerate(characters):
                     cur_width += 1
                     coord = Coordinate(column, row)
                     icon = Icon.MINERAL if char.isdigit() else Icon(char)
@@ -87,6 +88,7 @@ class MapData:
                             self._acid.append(coord)
                         case Icon.HOME_BASE:
                             self._landing_zone = coord
+                            icon = Icon.EMPTY
                         case Icon.MINERAL:
                             self._total_minerals[coord] = int(char)
                     tile_row.append(Tile(coord, icon))
@@ -110,7 +112,6 @@ class MapData:
         self._create_box(width, height)
 
         self._landing_zone = self._get_rand_coords()
-        self[self._landing_zone] = Icon.HOME_BASE
 
         wall_count = ((width * 2) + (height * 2)) - 4
         total_coordinates = self._width * self._height
@@ -193,6 +194,21 @@ class MapData:
             if not tile.discovered.get():
                 tile.discovered.set(True)
 
+    def deploy_home_base(self, home_base: HomeBase) -> None:
+        """Deploy the home base on the map.
+
+        Args:
+            home_base (HomeBase): The home base to deploy.
+        """
+        if self[self._landing_zone].surface != Icon.EMPTY:
+            raise ValueError("Landing zone is occupied")
+
+        home_base.context = self.build_context(self._landing_zone)
+        self[self._landing_zone].terrain = Icon.HOME_BASE
+        self.reveal_tile(self._landing_zone)
+        for coord in self._landing_zone.cardinals():
+            self.reveal_tile(coord)
+
     def deploy_atron(self, atron: Atron) -> None:
         """Add an atron to the map.
 
@@ -201,7 +217,7 @@ class MapData:
         Args:
             atron (Atron): The atron to add to the map.
         """
-        if self[self._landing_zone].surface != Icon.HOME_BASE:
+        if not self[self._landing_zone].surface.traversable():
             raise ValueError("Landing zone is occupied")
 
         atron.context = self.build_context(self._landing_zone)
@@ -283,7 +299,8 @@ class MapData:
 
     def _add_mineral(self) -> None:
         """Adds a single mineral deposit to a random open spot in the map."""
-        coordinates = self._get_rand_coords()
+        while (coordinates := self._get_rand_coords()) == self._landing_zone:
+            pass
 
         self[coordinates] = Icon.MINERAL
         self._total_minerals[coordinates] = randint(1, 9)
