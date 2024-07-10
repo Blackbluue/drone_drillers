@@ -254,7 +254,7 @@ class MapData:
                 self._total_minerals[new_location] -= 1
                 atron.payload.count(1)
                 if self._total_minerals[new_location] <= 0:
-                    self[new_location].clear_surface()
+                    self[new_location].surface = Icon.EMPTY
                     del self._total_minerals[new_location]
 
     def tick(self, drones: Iterable[Drone]) -> None:
@@ -265,7 +265,7 @@ class MapData:
                 if drone.context.center.coordinate in self._acid:
                     drone.health.count(Icon.ACID.health_cost())
                 if drone.health.get() <= 0:
-                    drone.context.center.clear_surface()
+                    drone.context.center.surface = Icon.EMPTY
                     drone.undeploy()  # mined minerals lost
                     break  # atron is dead move on to next
 
@@ -346,7 +346,7 @@ class MapData:
             new_location (Coordinate): The new location to move the atron to.
         """
         self[atron.context.center.coordinate].unoccupy()
-        atron.context.center.clear_surface()
+        atron.context.center.surface = Icon.EMPTY
         self[new_location].occupy(atron)
         atron.context = self.build_context(new_location)
         self.reveal_tile(new_location)
@@ -385,6 +385,5 @@ class MapData:
             str: The string representation of this object.
         """
         return "\n".join(
-            "".join([tile.surface.value for tile in row if tile.surface])
-            for row in self._all_tiles
+            "".join([str(tile) for tile in row]) for row in self._all_tiles
         )

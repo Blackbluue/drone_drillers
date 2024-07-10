@@ -21,11 +21,10 @@ class GraphicTile(Label):
         """Initialize the tile.
 
         Args:
-            master: The parent widget.
+            master (Frame): The parent widget.
             tile (Tile): The Tile.
         """
         super().__init__(master)
-        self._map_frame = master
         self._tile = tile
         self._visible_icon = IconVar(master=self)
         self["textvariable"] = self._visible_icon
@@ -38,7 +37,10 @@ class GraphicTile(Label):
     def _update_tile(self, *_) -> None:
         """Change the tile icon."""
         if self._tile.discovered.get():
-            self._visible_icon.set(self._tile.surface)
+            if self._tile.surface != Icon.EMPTY:
+                self._visible_icon.set(self._tile.surface)
+            else:
+                self._visible_icon.set(self._tile.terrain)
             self["bg"] = "white"
         else:
             self._visible_icon.set(Icon.UNKNOWN)

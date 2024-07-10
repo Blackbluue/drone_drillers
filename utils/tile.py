@@ -87,10 +87,6 @@ class Tile:
         """The atron occupying this tile, which may be None."""
         return self._occupation
 
-    def clear_surface(self) -> None:
-        """Clear the surface icon of this tile."""
-        self._surface.set(self._terrain.get())
-
     def occupy(self, atron: Atron) -> bool:
         """Occupy this tile with an atron.
 
@@ -135,7 +131,7 @@ class Tile:
         if not self._occupation:
             return False
         self._occupation = None
-        self._surface.set(self._terrain.get())
+        self._surface.set(Icon.EMPTY)
         return True
 
     def __eq__(self, __o):
@@ -166,14 +162,21 @@ class Tile:
             else __o
         )
 
-    def __str__(self) -> str:
-        icon_msg = (
-            f"Icon: {self.surface.value}" if self.surface else "Undiscovered"
-        )
-        return f"Tile({self.coordinate}, {icon_msg})"
+    def __str__(self) -> str:  # sourcery skip: assign-if-exp
+        """Return a string representation of this tile.
+
+        The discovered status of the tile is ignored in the string.
+
+        Returns:
+            str: The string representation of this tile.
+        """
+        if self.surface != Icon.EMPTY:
+            return self.surface.value
+        else:
+            return self.terrain.value
 
     def __repr__(self) -> str:
-        return f"Tile({self.coordinate}, {self.surface})"
+        return f"Tile({self.coordinate}, surface={self.surface}, terrain={self.terrain})"
 
     def __hash__(self) -> int:
         """The hash value of this object.
