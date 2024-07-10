@@ -42,17 +42,17 @@ class Dashboard(ttk.Frame):
         self._controller = parent
         self._configs = Configs()
 
-        self._player_health = LabeledCounter(
+        player_health_label = LabeledCounter(
             self, "Health:", counter=game_data.player.health
         )
-        self._player_payload = LabeledCounter(
+        player_payload_label = LabeledCounter(
             self, "Payload:", counter=game_data.player.payload
         )
-        self._ticks = LabeledCounter(self, "Ticks:", counter=ticks)
-        self._unrefined = LabeledCounter(
+        ticks_label = LabeledCounter(self, "Ticks:", counter=ticks)
+        unrefined_label = LabeledCounter(
             self, "Unrefined Minerals:", counter=game_data.total_unrefined
         )
-        self._refined = LabeledCounter(
+        refined_label = LabeledCounter(
             self, "Refined Minerals:", counter=game_data.total_refined
         )
 
@@ -64,15 +64,15 @@ class Dashboard(ttk.Frame):
         }
         self._drone_tree = self._make_tree(drone_labels)
 
-        self._time_buttons = self._make_time_buttons(game_data.player)
+        time_buttons = self._make_time_buttons(game_data.player)
 
         self._drone_tree.pack(side="left")
-        self._player_health.pack(fill="both")
-        self._player_payload.pack(fill="both")
-        self._ticks.pack(fill="both")
-        self._unrefined.pack(fill="both")
-        self._refined.pack(fill="both")
-        self._time_buttons.pack()
+        player_health_label.pack(fill="both")
+        player_payload_label.pack(fill="both")
+        ticks_label.pack(fill="both")
+        unrefined_label.pack(fill="both")
+        refined_label.pack(fill="both")
+        time_buttons.pack()
 
     def _make_tree(self, labels: Mapping[str, int]) -> ttk.Treeview:
         """Build trees for the dashboard to use.
