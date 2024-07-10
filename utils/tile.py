@@ -172,8 +172,7 @@ class Tile:
         """
         if self.surface != Icon.EMPTY:
             return self.surface.value
-        else:
-            return self.terrain.value
+        return self.terrain.value
 
     def __repr__(self) -> str:
         return f"Tile({self.coordinate}, surface={self.surface}, terrain={self.terrain})"
