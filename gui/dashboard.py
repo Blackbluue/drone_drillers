@@ -64,7 +64,7 @@ class Dashboard(ttk.Frame):
         }
         self._drone_tree = self._make_tree(drone_labels)
 
-        time_buttons = self._make_time_buttons(game_data.player)
+        time_buttons = self._make_time_buttons()
 
         self._drone_tree.pack(side="left")
         player_health_label.pack(fill="both")
@@ -101,8 +101,8 @@ class Dashboard(ttk.Frame):
             tree_view.heading(string_column, text=column)
         return tree_view
 
-    def _make_time_buttons(self, player: Player) -> ttk.Frame:
-        """Make buttons for the time."""
+    def _make_time_buttons(self) -> ttk.Frame:
+        """Make buttons to adjust game speed."""
         frame = ttk.Frame(self)
         stop = ttk.Button(frame, text="||", command=self._set_speed_stop)
         normal_speed = ttk.Button(
