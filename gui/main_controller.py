@@ -146,3 +146,4 @@ class MainController(tk.Tk):
             GraphicTile(self._map_frame, tile)
 
         self._game_data.set_current_map(map_data)
+        print(map_data, file=sys.stderr)
